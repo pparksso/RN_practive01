@@ -1,9 +1,10 @@
 import {useState} from "react";
-import {StyleSheet, Text, View, FlatList} from "react-native";
+import {StyleSheet, Text, View, FlatList, Pressable} from "react-native";
 import GoalInput from "./components/GoalInput";
 import GoalItem from "./components/GoalItem";
 
 export default function App() {
+  const [showModal, setShowModal] = useState(false);
   const [list, setList] = useState([]);
 
   const btnHandler = enteredGoalText => {
@@ -16,9 +17,19 @@ export default function App() {
   const deleteGoalHandler = id => {
     setList(current => current.filter(goal => goal.id !== id));
   };
+
   return (
     <View style={styles.appContainer}>
-      <GoalInput onAddGoal={btnHandler} />
+      <GoalInput
+        onAddGoal={btnHandler}
+        show={showModal}
+        hiddenModal={() => setShowModal(false)}
+      />
+      <Pressable onPress={() => setShowModal(true)}>
+        <View style={styles.addBtn}>
+          <Text style={styles.addBtnText}>ADD NEW GOAL</Text>
+        </View>
+      </Pressable>
       <View style={styles.goalsContainer}>
         <FlatList
           alwaysBounceVertical={false}
@@ -47,8 +58,23 @@ const styles = StyleSheet.create({
     paddingTop: 50,
     paddingHorizontal: 16,
   },
-
   goalsContainer: {
     flex: 5,
+  },
+  addBtn: {
+    flexDirection: "row",
+    justifyContent: "center",
+    marginTop: 30,
+  },
+  addBtnText: {
+    textAlign: "center",
+    borderWidth: 1,
+    width: "50%",
+    borderRadius: 5,
+    paddingVertical: 10,
+    backgroundColor: "#000",
+    color: "#fff",
+    fontWeight: "bold",
+    overflow: "hidden",
   },
 });

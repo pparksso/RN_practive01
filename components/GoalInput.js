@@ -1,5 +1,5 @@
 import {useState} from "react";
-import {View, TextInput, Button, StyleSheet} from "react-native";
+import {View, TextInput, Button, StyleSheet, Modal} from "react-native";
 
 const GoalItem = props => {
   const [enteredGoalText, setEnteredGoalText] = useState("");
@@ -9,39 +9,56 @@ const GoalItem = props => {
 
   const addGoalHandler = () => {
     props.onAddGoal(enteredGoalText);
+    props.hiddenModal();
     setEnteredGoalText("");
   };
-
   return (
-    <View style={styles.inputContainer}>
-      <TextInput
-        value={enteredGoalText}
-        onChangeText={inputHandler}
-        style={styles.textInput}
-        placeholder="Your course goal!"
-      />
-      <Button title="Add Goal" onPress={addGoalHandler} />
-    </View>
+    <Modal visible={props.show} animationType="fade">
+      <View style={styles.modalContainer}>
+        <View style={styles.inputContainer}>
+          <TextInput
+            value={enteredGoalText}
+            å
+            onChangeText={inputHandler}
+            style={styles.textInput}
+            placeholder="Your course goal!"
+          />
+        </View>
+        <View style={styles.btns}>
+          <Button title="Cancle" onPress={props.hiddenModal} />
+          <Button title="Add Goal" onPress={addGoalHandler} />
+        </View>
+      </View>
+    </Modal>
   );
 };
 
 export default GoalItem;
 
 const styles = StyleSheet.create({
-  inputContainer: {
-    flex: 1,
-    flexDirection: "row",
-    justifyContent: "space-between",
+  modalContainer: {
+    display: "flex",
+    justifyContent: "center",
     alignItems: "center",
-    marginBottom: 24,
-    borderBottomWidth: 1,
-    borderBottomColor: "#cccccc",
+    height: "100%",
+  },
+  inputContainer: {
+    flexDirection: "row",
+    justifyContent: "center",
+    alignItems: "center",
+    marginBottom: 20,
   },
   textInput: {
     borderWidth: 1,
     borderColor: "#cccccc",
     width: "70%",
-    marginRight: 8,
     padding: 8,
+  },
+  btns: {
+    display: "flex",
+    flexDirection: "row",
+    width: "40%",
+    justifyContent: "space-between",
+    alignItems: "center",
   },
 });
